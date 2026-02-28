@@ -26,6 +26,21 @@ html = re.sub(r"<veepn-lock-screen>.*?</veepn-lock-screen>", "", html, flags=re.
 # Remove "Made with Emergent" badge
 html = re.sub(r'<a\s+id="emergent-badge"[^>]*>.*?</a>\s*', "", html, flags=re.DOTALL)
 
+# Rebrand: Emergent | Fullstack App -> AI Tools Atlas
+html = re.sub(r"<!-- saved from url=\([^)]+\) -->", "<!-- AI Tools Atlas -->", html)
+html = html.replace('<meta name="description" content="A product of emergent.sh">',
+    '<meta name="description" content="AI Tools Atlas - Curated directory of 400+ AI tools">')
+html = html.replace("<title>Emergent | Fullstack App</title>", "<title>AI Tools Atlas</title>")
+# Add og/twitter meta if not present
+if 'og:title' not in html:
+    html = html.replace(
+        '<meta name="description" content="AI Tools Atlas - Curated directory of 400+ AI tools">',
+        '''<meta name="description" content="AI Tools Atlas - Curated directory of 400+ AI tools">
+        <meta property="og:title" content="AI Tools Atlas">
+        <meta property="og:site_name" content="AI Tools Atlas">
+        <meta name="twitter:title" content="AI Tools Atlas">'''
+    )
+
 with open(dst, "w", encoding="utf-8") as f:
     f.write(html)
 
